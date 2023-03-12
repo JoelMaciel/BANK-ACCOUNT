@@ -17,4 +17,7 @@ public interface AgencyService {
     void delete(UUID agencyId);
 
     Agency searchOrFail(UUID agencyId);
+
+
+    boolean existsAgencyAndNumber(String name, String number);
 }

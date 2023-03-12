@@ -8,6 +8,7 @@ import lombok.Setter;
 
 import javax.validation.constraints.NotNull;
 import java.math.BigDecimal;
+import java.util.UUID;
 
 @Getter
 @Setter
@@ -22,7 +23,7 @@ public class AccountInput {
     @NotNull
     private TypeAccount type;
 
-    //@NotNull
-    private AgencyDto agency;
+    @NotNull
+    private UUID agencyId;
 
 }

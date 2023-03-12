@@ -2,12 +2,10 @@ package com.bank.contas.domain.services.impl;
 
 import com.bank.contas.api.models.AgencyDto;
 import com.bank.contas.api.models.converter.AgencyToDto;
-import com.bank.contas.domain.exceptions.AccountNotExistsException;
+import com.bank.contas.domain.exceptions.AgencyNameAndNumberExcepetion;
 import com.bank.contas.domain.exceptions.AgencyNotFoundException;
 import com.bank.contas.domain.exceptions.EntityInUseException;
-import com.bank.contas.domain.models.Account;
 import com.bank.contas.domain.models.Agency;
-import com.bank.contas.domain.repositories.AccountRepository;
 import com.bank.contas.domain.repositories.AgencyRepository;
 import com.bank.contas.domain.services.AgencyService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,7 +16,6 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.time.OffsetDateTime;
 import java.util.UUID;
 
 @Service
@@ -41,6 +38,10 @@ public class AgencyServiceImpl implements AgencyService {
     @Transactional
     @Override
     public Agency save(Agency agency) {
+
+       if(existsAgencyAndNumber(agency.getName(), agency.getNumber())) {
+           throw  new AgencyNameAndNumberExcepetion("Agency name or number already exists.");
+       }
         return agencyRepository.save(agency);
     }
 
@@ -62,4 +63,10 @@ public class AgencyServiceImpl implements AgencyService {
         return agencyRepository.findById(agencyId)
                 .orElseThrow(() -> new AgencyNotFoundException(agencyId));
     }
+
+    @Override
+    public boolean existsAgencyAndNumber(String name, String number) {
+        return agencyRepository.existsByNameAndNumber(name, number);
+    }
+
 }
