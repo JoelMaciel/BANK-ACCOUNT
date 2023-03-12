@@ -52,7 +52,7 @@ public class AccountController {
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public AccountDto saveAccount(@RequestBody @Valid AccountInput accountInput) {
+    public AccountDto saveAccount(@RequestBody @Valid  AccountInput accountInput) {
 
       var account =  accountInputToDomain.toDomainObject(accountInput);
       account.setCreationDate(OffsetDateTime.now());

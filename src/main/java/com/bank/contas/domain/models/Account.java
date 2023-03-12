@@ -26,7 +26,7 @@ public class Account implements Serializable {
     @Type(type = "org.hibernate.type.UUIDCharType")
     private UUID accountId;
 
-    @Column(nullable = false)
+    @Column(nullable = false, unique = true)
     private String number;
 
 
