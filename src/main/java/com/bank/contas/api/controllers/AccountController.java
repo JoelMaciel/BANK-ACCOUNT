@@ -7,6 +7,7 @@ import com.bank.contas.api.models.converter.AccountToDto;
 import com.bank.contas.api.models.input.AccountInput;
 import com.bank.contas.api.models.input.AccountInputUpdate;
 import com.bank.contas.domain.services.AccountService;
+import com.bank.contas.infrastructure.specification.SpecificationTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -37,9 +38,9 @@ public class AccountController {
     private AccountToDto accountToDto;
 
     @GetMapping
-    public Page<AccountDto> getAllAccounts(@PageableDefault(page = 0, sort = "accountId",
+    public Page<AccountDto> getAllAccounts(SpecificationTemplate.AccountSpec spec, @PageableDefault(page = 0, sort = "accountId",
             direction = Sort.Direction.ASC) Pageable pageable) {
-        var accountPage = accountService.findAll(pageable);
+        var accountPage = accountService.findAll(spec, pageable);
         return  accountPage;
     }
 
