@@ -14,6 +14,7 @@ import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -33,6 +34,15 @@ public class AccountServiceImpl implements AccountService {
 
     @Autowired
     private AccountToDto accountToDto;
+
+
+
+    @Override
+    public Page<AccountDto> findAll(Specification<Account> spec, Pageable pageable) {
+        Page<Account> accountPage = accountRepository.findAll(spec ,pageable);
+        return accountToDto.converterToPageDto(accountPage, pageable);
+    }
+
 
     @Override
     public Account save(Account account) {
@@ -60,12 +70,6 @@ public class AccountServiceImpl implements AccountService {
             throw  new EntityInUseException(String.format(MSG_ACCOUNT_IN_USE, accountId));
         }
 
-    }
-
-    @Override
-    public Page<AccountDto> findAll(Pageable pageable) {
-        Page<Account> accountPage = accountRepository.findAll(pageable);
-        return accountToDto.converterToPageDto(accountPage, pageable);
     }
 
     @Override
