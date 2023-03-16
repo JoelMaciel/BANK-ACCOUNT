@@ -33,9 +33,5 @@ public class Agency implements Serializable {
     @Column(nullable = false, columnDefinition = "datetime")
     private OffsetDateTime updateDate;
 
-//    @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
-//    @OneToMany(mappedBy = "agency", fetch = FetchType.LAZY)
-//    @Fetch(FetchMode.SUBSELECT)
-//    private Set<Account> accounts;
 
 }
