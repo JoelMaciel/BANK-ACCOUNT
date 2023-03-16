@@ -1,23 +1,27 @@
 package com.bank.contas.domain.services;
 
-import com.bank.contas.api.models.AccountDto;
+import com.bank.contas.api.models.request.AccountDTO;
+import com.bank.contas.api.models.request.AccountDTOUpdate;
 import com.bank.contas.domain.models.Account;
-import com.bank.contas.infrastructure.specification.SpecificationTemplate;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
 
-import java.math.BigDecimal;
 import java.util.UUID;
 
 public interface AccountService {
-    Account save(Account account);
+    AccountDTO save(AccountDTO accountDTO);
 
     void delete(UUID accountId);
 
-    Page<AccountDto> findAll(Specification<Account> spec, Pageable pageable);
-
-     Account searchOrFail(UUID accountId);
+    Page<AccountDTO> findAll(Specification<Account> spec, Pageable pageable);
 
      boolean existsAccountNumber(String number);
+
+
+    AccountDTO updateAccount(AccountDTOUpdate accountUpdate);
+
+    AccountDTO findByAccount(UUID accountId);
+
+    Account searchOrFail(UUID accountId);
 }
