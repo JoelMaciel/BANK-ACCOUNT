@@ -4,7 +4,6 @@ import com.bank.contas.domain.exceptions.*;
 import com.fasterxml.jackson.databind.JsonMappingException.Reference;
 import com.fasterxml.jackson.databind.exc.InvalidFormatException;
 import com.fasterxml.jackson.databind.exc.PropertyBindingException;
-
 import org.apache.commons.lang3.exception.ExceptionUtils;
 import org.springframework.beans.TypeMismatchException;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -241,22 +240,6 @@ public class ApiExceptionHandler extends ResponseEntityExceptionHandler {
 		return handleExceptionInternal(ex, problem, new HttpHeaders(), status, request);
 	}
 
-	@ExceptionHandler(AgencyNameAndNumberExcepetion.class)
-	public ResponseEntity<?> handleEntityEmUse(AgencyNameAndNumberExcepetion ex, WebRequest request) {
-
-		HttpStatus status = HttpStatus.CONFLICT;
-		ProblemType problemType = ProblemType.ENTITY_IN_USE;
-		String detail = ex.getMessage();
-
-		Problem problem = createProblemBuilder(status, problemType, detail)
-				.userMessage(detail)
-				.build();
-
-		return handleExceptionInternal(ex, problem, new HttpHeaders(), status, request);
-	}
-
-
-	
 	@ExceptionHandler(BusinessException.class)
 	public ResponseEntity<?> handleBusiness(BusinessException ex, WebRequest request) {
 

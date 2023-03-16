@@ -1,16 +1,13 @@
-package com.bank.contas.api.models.input;
+package com.bank.contas.api.models.request;
 
 import com.bank.contas.domain.enums.TypeAccount;
-import com.bank.contas.domain.models.Agency;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.Data;
 
 import javax.validation.constraints.NotNull;
 import java.math.BigDecimal;
 
-@Getter
-@Setter
-public class AccountInputUpdate {
+@Data
+public class AccountDTO {
 
     @NotNull
     private String number;
@@ -19,6 +16,10 @@ public class AccountInputUpdate {
     private TypeAccount type;
 
     @NotNull
-    private Agency agency;
+    private BigDecimal balance;
+
+    @NotNull
+    private String numberAgency;
+
 
 }

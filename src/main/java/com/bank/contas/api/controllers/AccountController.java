@@ -1,14 +1,11 @@
 package com.bank.contas.api.controllers;
 
-import com.bank.contas.api.models.AccountDto;
-import com.bank.contas.api.models.converter.AccountInputToDomain;
-import com.bank.contas.api.models.converter.AccountInputUpdateToDomain;
-import com.bank.contas.api.models.converter.AccountToDto;
-import com.bank.contas.api.models.input.AccountInput;
-import com.bank.contas.api.models.input.AccountInputUpdate;
+import com.bank.contas.api.models.request.AccountDTO;
+import com.bank.contas.api.models.request.AccountDTOUpdate;
+import com.bank.contas.api.models.response.AccountSummaryDTO;
 import com.bank.contas.domain.services.AccountService;
 import com.bank.contas.infrastructure.specification.SpecificationTemplate;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
@@ -17,67 +14,36 @@ import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
-import java.time.OffsetDateTime;
 import java.util.UUID;
 
 @RestController
+@RequiredArgsConstructor
 @RequestMapping("/accounts")
 @CrossOrigin(origins = "*", maxAge = 3600)
 public class AccountController {
-
-    @Autowired
-    private AccountService accountService;
-
-    @Autowired
-    private AccountInputToDomain accountInputToDomain;
-
-    @Autowired
-    private AccountInputUpdateToDomain accountInputUpdateToDomain;
-
-    @Autowired
-    private AccountToDto accountToDto;
+    private final AccountService accountService;
 
     @GetMapping
-    public Page<AccountDto> getAllAccounts(SpecificationTemplate.AccountSpec spec, @PageableDefault(page = 0, sort = "accountId",
+    public Page<AccountSummaryDTO> getAllAccounts(@PageableDefault(page = 0, sort = "accountId",
             direction = Sort.Direction.ASC) Pageable pageable) {
-        var accountPage = accountService.findAll(spec, pageable);
-        return  accountPage;
+        return accountService.findAll(pageable);
     }
 
     @GetMapping("/{accountId}")
-    public AccountDto getOneAccount(@PathVariable UUID accountId) {
-        var accountCurrent = accountService.searchOrFail(accountId);
-        var accountDto = accountToDto.converter(accountCurrent);
-        return accountDto;
+    public AccountSummaryDTO getOneAccount(@PathVariable UUID accountId) {
+        return accountService.findByAccount(accountId);
     }
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public AccountDto saveAccount(@RequestBody @Valid  AccountInput accountInput) {
-
-      var account =  accountInputToDomain.toDomainObject(accountInput);
-      account.setCreationDate(OffsetDateTime.now());
-      account.setUpdateDate(OffsetDateTime.now());
-      accountService.save(account);
-
-      var accountDto = accountToDto.converter(account);
-
-      return accountDto;
+    public AccountDTO saveAccount(@RequestBody @Valid AccountDTO accountDTO) {
+       return accountService.save(accountDTO);
     }
 
     @PutMapping("{accountId}")
-    public AccountDto updateAccount(@PathVariable UUID accountId,
-                                    @RequestBody @Valid AccountInputUpdate accountUpdate) {
-        var accountCurrente = accountService.searchOrFail(accountId);
-
-        accountInputUpdateToDomain.copyToDomainObject(accountUpdate, accountCurrente);
-        accountCurrente.setUpdateDate(OffsetDateTime.now());
-        accountService.save(accountCurrente);
-
-        var accountDto = accountToDto.converter(accountCurrente);
-
-        return accountDto;
-
+    public AccountSummaryDTO updateAccount(@PathVariable UUID accountId,
+                          @RequestBody @Valid AccountDTOUpdate accountUpdate) {
+      return   accountService.updateAccount(accountId, accountUpdate);
     }
 
     @DeleteMapping("/{accountId}")

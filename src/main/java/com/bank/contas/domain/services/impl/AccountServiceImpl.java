@@ -1,58 +1,73 @@
 package com.bank.contas.domain.services.impl;
 
-import com.bank.contas.api.models.AccountDto;
-import com.bank.contas.api.models.converter.AccountToDto;
+import com.bank.contas.api.models.converter.accounts.AccountDTOToDomain;
+import com.bank.contas.api.models.converter.accounts.AccountToDTO;
+import com.bank.contas.api.models.request.AccountDTO;
+import com.bank.contas.api.models.request.AccountDTOUpdate;
+import com.bank.contas.api.models.response.AccountSummaryDTO;
 import com.bank.contas.domain.exceptions.AccountNotExistsException;
 import com.bank.contas.domain.exceptions.EntityInUseException;
+import com.bank.contas.domain.exceptions.EntityNotExistsException;
 import com.bank.contas.domain.exceptions.NumberAccountInUseException;
 import com.bank.contas.domain.models.Account;
 import com.bank.contas.domain.repositories.AccountRepository;
+import com.bank.contas.domain.repositories.AgencyRepository;
 import com.bank.contas.domain.services.AccountService;
-import com.bank.contas.domain.services.AgencyService;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
-import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.UUID;
 
+@RequiredArgsConstructor
 @Service
 public class AccountServiceImpl implements AccountService {
 
     private static final String MSG_ACCOUNT_IN_USE =
             "Code account %s cannot be removed as it is in use";
 
-    @Autowired
-    private AccountRepository accountRepository;
+    private final AccountRepository accountRepository;
 
-    @Autowired
-    private AgencyService agencyService;
-
-    @Autowired
-    private AccountToDto accountToDto;
-
-
+    private final AgencyRepository agencyRepository;
+    private final AccountDTOToDomain accountDTOToDomain;
+    private final AccountToDTO accountToDto;
 
     @Override
-    public Page<AccountDto> findAll(Specification<Account> spec, Pageable pageable) {
-        Page<Account> accountPage = accountRepository.findAll(spec ,pageable);
+    public Page<AccountSummaryDTO> findAll(Pageable pageable) {
+        Page<Account> accountPage = accountRepository.findAll(pageable);
         return accountToDto.converterToPageDto(accountPage, pageable);
     }
 
+    @Override
+    public AccountSummaryDTO updateAccount(UUID accountId, AccountDTOUpdate accountUpdate) {
+        Account account = searchOrFail(accountId);
+        accountDTOToDomain.copyToDomainObjectSummary(accountUpdate, account);
+        accountRepository.save(account);
+        return accountToDto.converterSumarry(account);
+    }
 
     @Override
-    public Account save(Account account) {
+    public AccountSummaryDTO findByAccount(UUID accountId) {
+       return accountToDto.converterSumarry(searchOrFail(accountId));
+    }
+
+    @Transactional
+    @Override
+    public AccountDTO save(AccountDTO accountDTO) {
         try {
-            UUID agencyId = account.getAgency().getAgencyId();
-            agencyService.searchOrFail(agencyId);
+            String agencynumber= accountDTO.getNumberAgency();
+            var agency = agencyRepository.findByNumber(agencynumber);
 
-            existsAccountNumber(account.getNumber());
+            existsAccountNumber(accountDTO.getNumber());
 
-            return accountRepository.save(account);
+            var account = accountDTOToDomain.toDomainObject(accountDTO);
+            account.setAgency(agency.get());
+            accountRepository.save(account);
+            return accountToDto.converter(account);
         } catch (DataIntegrityViolationException e) {
             throw  new NumberAccountInUseException("An account with that number already exists.");
         }
@@ -73,14 +88,18 @@ public class AccountServiceImpl implements AccountService {
     }
 
     @Override
-    public Account searchOrFail(UUID accountId) {
-        return accountRepository.findById(accountId)
-                .orElseThrow(() -> new AccountNotExistsException(accountId));
+    public boolean existsAccountNumber(String number) {
+           boolean acountNumber  = accountRepository.existsByNumber(number);
+           if(acountNumber) {
+               throw new EntityNotExistsException("There is no account with that number");
+           }
+           return false;
     }
 
     @Override
-    public boolean existsAccountNumber(String number) {
-       return accountRepository.existsByNumber(number);
+    public Account searchOrFail(UUID accountId) {
+        return accountRepository.findById(accountId)
+                .orElseThrow(() -> new AccountNotExistsException(accountId));
     }
 }
 
