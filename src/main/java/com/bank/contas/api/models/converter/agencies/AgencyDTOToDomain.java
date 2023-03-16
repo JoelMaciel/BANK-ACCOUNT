@@ -1,4 +1,4 @@
-package com.bank.contas.api.models.converter;
+package com.bank.contas.api.models.converter.agencies;
 
 import com.bank.contas.api.models.response.AgencyDTO;
 import com.bank.contas.domain.models.Agency;

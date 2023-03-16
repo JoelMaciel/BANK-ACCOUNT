@@ -12,20 +12,21 @@ import java.util.UUID;
 public interface AgencyService {
 
     Page<AgencyDTO> findAll(Specification<Agency> agency, Pageable pageable);
+
+    Optional<Agency> findByNumber(String number);
+
     AgencyDTO save(AgencyDTO agencyDTO);
 
     void delete(UUID agencyId);
+
     Agency searchOrFail(UUID agencyId);
+
     boolean existsByName(String name);
+
     AgencyDTO findByAgency(UUID agencyId);
 
     boolean existsAgencyNumber(String number);
 
-    AgencyDTO findByName(String name);
-
     AgencyDTO updateAgency(UUID agencyId, AgencyDTO agencyDTO);
 
-    Optional<Agency> findByNumber(String number);
-
-    //
 }

@@ -1,25 +1,20 @@
-package com.bank.contas.api.models.request;
+package com.bank.contas.api.models.response;
 
 import com.bank.contas.domain.enums.TypeAccount;
 import lombok.Data;
 
 import javax.validation.constraints.NotNull;
 import java.math.BigDecimal;
+import java.util.UUID;
 
 @Data
-public class AccountDTO {
+public class AccountSummaryDTO {
 
-    @NotNull
     private String number;
 
-    @NotNull
     private TypeAccount type;
 
-    @NotNull
     private BigDecimal balance;
 
-    @NotNull
-    private String numberAgency;
-
-
+    private UUID agencyId;
 }

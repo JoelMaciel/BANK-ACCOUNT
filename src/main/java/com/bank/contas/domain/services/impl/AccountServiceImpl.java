@@ -1,29 +1,26 @@
 package com.bank.contas.domain.services.impl;
 
-import com.bank.contas.api.models.converter.AccountDTOToDomain;
-import com.bank.contas.api.models.converter.AccountToDTO;
+import com.bank.contas.api.models.converter.accounts.AccountDTOToDomain;
+import com.bank.contas.api.models.converter.accounts.AccountToDTO;
 import com.bank.contas.api.models.request.AccountDTO;
 import com.bank.contas.api.models.request.AccountDTOUpdate;
+import com.bank.contas.api.models.response.AccountSummaryDTO;
 import com.bank.contas.domain.exceptions.AccountNotExistsException;
 import com.bank.contas.domain.exceptions.EntityInUseException;
 import com.bank.contas.domain.exceptions.EntityNotExistsException;
 import com.bank.contas.domain.exceptions.NumberAccountInUseException;
 import com.bank.contas.domain.models.Account;
-import com.bank.contas.domain.models.Agency;
 import com.bank.contas.domain.repositories.AccountRepository;
+import com.bank.contas.domain.repositories.AgencyRepository;
 import com.bank.contas.domain.services.AccountService;
-import com.bank.contas.domain.services.AgencyService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
-import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import javax.validation.ConstraintViolationException;
-import java.util.Optional;
 import java.util.UUID;
 
 @RequiredArgsConstructor
@@ -34,39 +31,41 @@ public class AccountServiceImpl implements AccountService {
             "Code account %s cannot be removed as it is in use";
 
     private final AccountRepository accountRepository;
-    private final AgencyService agencyService;
+
+    private final AgencyRepository agencyRepository;
     private final AccountDTOToDomain accountDTOToDomain;
     private final AccountToDTO accountToDto;
 
     @Override
-    public Page<AccountDTO> findAll(Specification<Account> spec, Pageable pageable) {
-        Page<Account> accountPage = accountRepository.findAll(spec ,pageable);
+    public Page<AccountSummaryDTO> findAll(Pageable pageable) {
+        Page<Account> accountPage = accountRepository.findAll(pageable);
         return accountToDto.converterToPageDto(accountPage, pageable);
     }
 
-
-
     @Override
-    public AccountDTO updateAccount(AccountDTOUpdate accountUpdate) {
-        return null;
+    public AccountSummaryDTO updateAccount(UUID accountId, AccountDTOUpdate accountUpdate) {
+        Account account = searchOrFail(accountId);
+        accountDTOToDomain.copyToDomainObjectSummary(accountUpdate, account);
+        accountRepository.save(account);
+        return accountToDto.converterSumarry(account);
     }
 
     @Override
-    public AccountDTO findByAccount(UUID accountId) {
-       return accountToDto.converter(searchOrFail(accountId));
+    public AccountSummaryDTO findByAccount(UUID accountId) {
+       return accountToDto.converterSumarry(searchOrFail(accountId));
     }
 
     @Transactional
     @Override
     public AccountDTO save(AccountDTO accountDTO) {
         try {
-            String agencyName= accountDTO.getNameAgency();
-            var agency = agencyService.findByName(agencyName);
+            String agencynumber= accountDTO.getNumberAgency();
+            var agency = agencyRepository.findByNumber(agencynumber);
 
             existsAccountNumber(accountDTO.getNumber());
 
             var account = accountDTOToDomain.toDomainObject(accountDTO);
-            account.getAgency().setName(agencyName);
+            account.setAgency(agency.get());
             accountRepository.save(account);
             return accountToDto.converter(account);
         } catch (DataIntegrityViolationException e) {

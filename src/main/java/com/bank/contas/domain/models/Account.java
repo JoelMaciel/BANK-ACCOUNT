@@ -43,6 +43,7 @@ public class Account implements Serializable {
 
     @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     @ManyToOne(optional = false, fetch = FetchType.LAZY)
+    @JoinColumn(name = "agency_id")
     private Agency agency;
 
 }

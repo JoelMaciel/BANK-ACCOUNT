@@ -1,6 +1,5 @@
 package com.bank.contas.domain.models;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Data;
 import org.hibernate.annotations.*;
 
@@ -8,7 +7,6 @@ import javax.persistence.Entity;
 import javax.persistence.*;
 import java.io.Serializable;
 import java.time.OffsetDateTime;
-import java.util.Set;
 import java.util.UUID;
 
 @Data
@@ -24,7 +22,7 @@ public class Agency implements Serializable {
     @Column(nullable = false, unique = true)
     private String name;
 
-    @Column(nullable = false)
+    @Column(nullable = false, unique = true)
     private String number;
 
     @CreationTimestamp
@@ -35,9 +33,9 @@ public class Agency implements Serializable {
     @Column(nullable = false, columnDefinition = "datetime")
     private OffsetDateTime updateDate;
 
-    @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
-    @OneToMany(mappedBy = "agency", fetch = FetchType.LAZY)
-    @Fetch(FetchMode.SUBSELECT)
-    private Set<Account> accounts;
+//    @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
+//    @OneToMany(mappedBy = "agency", fetch = FetchType.LAZY)
+//    @Fetch(FetchMode.SUBSELECT)
+//    private Set<Account> accounts;
 
 }

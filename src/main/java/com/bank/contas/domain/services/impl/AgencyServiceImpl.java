@@ -1,7 +1,7 @@
 package com.bank.contas.domain.services.impl;
 
-import com.bank.contas.api.models.converter.AgencyDTOToDomain;
-import com.bank.contas.api.models.converter.AgencyToDTO;
+import com.bank.contas.api.models.converter.agencies.AgencyDTOToDomain;
+import com.bank.contas.api.models.converter.agencies.AgencyToDTO;
 import com.bank.contas.api.models.response.AgencyDTO;
 import com.bank.contas.domain.exceptions.AgencyNotFoundException;
 import com.bank.contas.domain.exceptions.EntityInUseException;
@@ -107,8 +107,9 @@ public class AgencyServiceImpl implements AgencyService {
         return agencyRepository.existsByNumber(number);
     }
 
-    @Override
-    public AgencyDTO findByName(String name) {
-        return agencyRepository.findByName(name);
-    }
+//    @Override
+//    public AgencyDTO findByName(String name) {
+//
+//        return agencyRepository.findByName(name);
+//    }
 }

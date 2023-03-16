@@ -14,5 +14,5 @@ public interface AgencyRepository extends JpaRepository<Agency, UUID>, JpaSpecif
     boolean existsByNumber(String number);
    Optional<Agency> findByNumber(String number);
 
-    AgencyDTO findByName(String name);
+    Optional<Agency> findByName(String name);
 }

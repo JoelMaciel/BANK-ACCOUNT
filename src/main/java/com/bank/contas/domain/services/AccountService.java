@@ -2,6 +2,7 @@ package com.bank.contas.domain.services;
 
 import com.bank.contas.api.models.request.AccountDTO;
 import com.bank.contas.api.models.request.AccountDTOUpdate;
+import com.bank.contas.api.models.response.AccountSummaryDTO;
 import com.bank.contas.domain.models.Account;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -14,14 +15,14 @@ public interface AccountService {
 
     void delete(UUID accountId);
 
-    Page<AccountDTO> findAll(Specification<Account> spec, Pageable pageable);
+    Page<AccountSummaryDTO> findAll(Pageable pageable);
 
      boolean existsAccountNumber(String number);
 
 
-    AccountDTO updateAccount(AccountDTOUpdate accountUpdate);
+    AccountSummaryDTO updateAccount(UUID accountId, AccountDTOUpdate accountUpdate);
 
-    AccountDTO findByAccount(UUID accountId);
+    AccountSummaryDTO findByAccount(UUID accountId);
 
     Account searchOrFail(UUID accountId);
 }

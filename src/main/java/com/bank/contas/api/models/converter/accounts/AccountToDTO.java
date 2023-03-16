@@ -1,6 +1,7 @@
-package com.bank.contas.api.models.converter;
+package com.bank.contas.api.models.converter.accounts;
 
 import com.bank.contas.api.models.request.AccountDTO;
+import com.bank.contas.api.models.response.AccountSummaryDTO;
 import com.bank.contas.domain.models.Account;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,9 +19,13 @@ public class AccountToDTO {
         return  modelMapper.map(account, AccountDTO.class);
     }
 
-    public Page<AccountDTO> converterToPageDto(Page<Account> accountsPage, Pageable pageable) {
+    public AccountSummaryDTO converterSumarry(Account account) {
+        return  modelMapper.map(account, AccountSummaryDTO.class);
+    }
+
+    public Page<AccountSummaryDTO> converterToPageDto(Page<Account> accountsPage, Pageable pageable) {
         var accountDtoPage = accountsPage.map(
-                account -> modelMapper.map(account, AccountDTO.class));
+                account -> modelMapper.map(account, AccountSummaryDTO.class));
         return  accountDtoPage;
     }
 }

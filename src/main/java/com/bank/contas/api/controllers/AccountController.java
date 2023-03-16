@@ -2,6 +2,7 @@ package com.bank.contas.api.controllers;
 
 import com.bank.contas.api.models.request.AccountDTO;
 import com.bank.contas.api.models.request.AccountDTOUpdate;
+import com.bank.contas.api.models.response.AccountSummaryDTO;
 import com.bank.contas.domain.services.AccountService;
 import com.bank.contas.infrastructure.specification.SpecificationTemplate;
 import lombok.RequiredArgsConstructor;
@@ -23,13 +24,13 @@ public class AccountController {
     private final AccountService accountService;
 
     @GetMapping
-    public Page<AccountDTO> getAllAccounts(SpecificationTemplate.AccountSpec spec, @PageableDefault(page = 0, sort = "accountId",
+    public Page<AccountSummaryDTO> getAllAccounts(@PageableDefault(page = 0, sort = "accountId",
             direction = Sort.Direction.ASC) Pageable pageable) {
-        return accountService.findAll(spec, pageable);
+        return accountService.findAll(pageable);
     }
 
-    @GetMapping("/{accountID}")
-    public AccountDTO getOneAccount(@PathVariable UUID accountId) {
+    @GetMapping("/{accountId}")
+    public AccountSummaryDTO getOneAccount(@PathVariable UUID accountId) {
         return accountService.findByAccount(accountId);
     }
 
@@ -40,9 +41,9 @@ public class AccountController {
     }
 
     @PutMapping("{accountId}")
-    public AccountDTO updateAccount(@PathVariable UUID accountId,
+    public AccountSummaryDTO updateAccount(@PathVariable UUID accountId,
                           @RequestBody @Valid AccountDTOUpdate accountUpdate) {
-      return   accountService.updateAccount(accountUpdate);
+      return   accountService.updateAccount(accountId, accountUpdate);
     }
 
     @DeleteMapping("/{accountId}")

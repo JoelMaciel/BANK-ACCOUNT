@@ -1,6 +1,6 @@
 package com.bank.contas.api.controllers;
 
-import com.bank.contas.api.models.converter.AgencyToDTO;
+import com.bank.contas.api.models.converter.agencies.AgencyToDTO;
 import com.bank.contas.api.models.response.AgencyDTO;
 import com.bank.contas.domain.services.AgencyService;
 import com.bank.contas.infrastructure.specification.SpecificationTemplate;
