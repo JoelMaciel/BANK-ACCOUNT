@@ -18,12 +18,12 @@ public class AccountClient implements Serializable {
     @Type(type = "org.hibernate.type.UUIDCharType")
     private UUID id;
 
-    @ManyToOne(fetch = FetchType.LAZY, optional = false)
-    @JoinColumn(name = "account_id")
-    private Account account;
-
     @Column(nullable = false)
     @Type(type = "org.hibernate.type.UUIDCharType")
     private UUID clientId;
+
+    @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    @JoinColumn(name = "account_id")
+    private Account account;
 
 }

@@ -66,8 +66,8 @@ public class AccountServiceImpl implements AccountService {
     @Override
     public AccountDTO save(AccountDTO accountDTO) {
         try {
-            String agencynumber= accountDTO.getNumberAgency();
-            var agency = agencyRepository.findByNumber(agencynumber);
+            String agencyNumber= accountDTO.getNumberAgency();
+            var agency = agencyRepository.findByNumber(agencyNumber);
 
             existsAccountNumber(accountDTO.getNumber());
 
