@@ -13,11 +13,13 @@ import com.bank.contas.domain.models.Account;
 import com.bank.contas.domain.repositories.AccountRepository;
 import com.bank.contas.domain.repositories.AgencyRepository;
 import com.bank.contas.domain.services.AccountService;
+import com.bank.contas.infrastructure.specification.SpecificationTemplate;
 import lombok.RequiredArgsConstructor;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -37,8 +39,13 @@ public class AccountServiceImpl implements AccountService {
     private final AccountToDTO accountToDto;
 
     @Override
-    public Page<AccountSummaryDTO> findAll(Pageable pageable) {
-        Page<Account> accountPage = accountRepository.findAll(pageable);
+    public Page<AccountSummaryDTO> findAll(Specification<Account> spec, UUID clientId, Pageable pageable) {
+        Page<Account> accountPage = null;
+        if(clientId != null) {
+            accountPage = accountRepository.findAll(SpecificationTemplate.accountClientId(clientId).and(spec), pageable);
+        } else {
+            accountPage = accountRepository.findAll(pageable);
+        }
         return accountToDto.converterToPageDto(accountPage, pageable);
     }
 
