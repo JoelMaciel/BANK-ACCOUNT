@@ -1,5 +1,6 @@
 package com.bank.contas.api.clients;
 
+import com.bank.contas.api.models.request.AccountClientDTO;
 import com.bank.contas.api.models.response.ClientDTO;
 import com.bank.contas.api.models.response.ResponsePageDTO;
 import com.bank.contas.domain.services.UtilsService;
@@ -54,5 +55,13 @@ public class ClientRequestClient {
     public ResponseEntity<ClientDTO> getOneClientById(UUID clientId) {
         String url = REQUEST_URL_CLIENT  + "/clients/" + clientId;
         return  restTemplate.exchange(url, HttpMethod.GET, null, ClientDTO.class);
+    }
+
+    public void postSubscriptionClientInAccount(UUID accountId, UUID clientId) {
+        String url = REQUEST_URL_CLIENT + "/clients/" + clientId + "/accounts/subscription";
+        var accountClientDTO = new AccountClientDTO();
+        accountClientDTO.setClientId(clientId);
+        accountClientDTO.setAccountId(accountId);
+        restTemplate.postForObject(url, accountClientDTO, String.class);
     }
 }

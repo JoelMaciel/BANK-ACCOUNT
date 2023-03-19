@@ -14,5 +14,7 @@ public interface AccountClientService {
 
     AccountClient save(AccountClient accountClient);
 
-    AccountClientDTO saveClientInAccount(UUID accountId, SubscriptionDTO subscriptionDTO);
+    //AccountClientDTO saveClientInAccount(UUID accountId, SubscriptionDTO subscriptionDTO);
+
+    AccountClientDTO saveAndSubscriptionClientInAccount(UUID accountId, SubscriptionDTO subscriptionDTO);
 }

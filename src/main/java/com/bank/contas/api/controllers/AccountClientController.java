@@ -36,7 +36,7 @@ public class AccountClientController {
     @ResponseStatus(HttpStatus.CREATED)
     public AccountClientDTO saveSubscriptionClientInAccount(
             @PathVariable(value = "accountId") UUID accountId, @RequestBody @Valid SubscriptionDTO subscriptionDTO) {
-        return accountClientService.saveClientInAccount(accountId, subscriptionDTO);
+        return accountClientService.saveAndSubscriptionClientInAccount(accountId, subscriptionDTO);
     }
 
 }

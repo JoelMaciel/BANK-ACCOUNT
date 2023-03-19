@@ -14,6 +14,7 @@ import com.bank.contas.domain.services.AccountService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.client.HttpStatusCodeException;
 
 import java.util.UUID;
@@ -27,11 +28,27 @@ public class AccountClientServiceImpl implements AccountClientService {
 
     private final ClientRequestClient clientRequestClient;
 
+//    @Override
+//    public AccountClientDTO saveClientInAccount(UUID accountId, SubscriptionDTO subscriptionDTO) {
+//        var account = accountService.searchOrFail(accountId);
+//        ResponseEntity<ClientDTO> responseClient;
+//
+//        if(existsByAccountAndClientId(account, subscriptionDTO.getClientId())){
+//            throw new EntityInUseException("Error: There is already a customer registered in this account!");
+//        }
+//        try {
+//            responseClient = clientRequestClient.getOneClientById(subscriptionDTO.getClientId());
+//        } catch (HttpStatusCodeException e) {
+//            throw new EntityNotExistsException("Client not found");
+//        }
+//        return  AccountClientDTO.converterToDTO(save(account.converterToAccountClient(subscriptionDTO.getClientId())));
+//    }
+
+    @Transactional
     @Override
-    public AccountClientDTO saveClientInAccount(UUID accountId, SubscriptionDTO subscriptionDTO) {
+    public AccountClientDTO saveAndSubscriptionClientInAccount(UUID accountId, SubscriptionDTO subscriptionDTO) {
         var account = accountService.searchOrFail(accountId);
         ResponseEntity<ClientDTO> responseClient;
-
         if(existsByAccountAndClientId(account, subscriptionDTO.getClientId())){
             throw new EntityInUseException("Error: There is already a customer registered in this account!");
         }
@@ -40,7 +57,9 @@ public class AccountClientServiceImpl implements AccountClientService {
         } catch (HttpStatusCodeException e) {
             throw new EntityNotExistsException("Client not found");
         }
-        return  AccountClientDTO.converterToDTO(save(account.converterToAccountClient(subscriptionDTO.getClientId())));
+        var accountClient = save(account.converterToAccountClient(subscriptionDTO.getClientId()));
+        clientRequestClient.postSubscriptionClientInAccount(accountClient.getAccount().getAccountId(), accountClient.getClientId());
+        return  AccountClientDTO.converterToDTO(accountClient);
     }
 
     @Override
