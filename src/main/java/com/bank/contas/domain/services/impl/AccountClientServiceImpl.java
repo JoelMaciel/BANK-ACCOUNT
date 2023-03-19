@@ -28,21 +28,6 @@ public class AccountClientServiceImpl implements AccountClientService {
 
     private final ClientRequestClient clientRequestClient;
 
-//    @Override
-//    public AccountClientDTO saveClientInAccount(UUID accountId, SubscriptionDTO subscriptionDTO) {
-//        var account = accountService.searchOrFail(accountId);
-//        ResponseEntity<ClientDTO> responseClient;
-//
-//        if(existsByAccountAndClientId(account, subscriptionDTO.getClientId())){
-//            throw new EntityInUseException("Error: There is already a customer registered in this account!");
-//        }
-//        try {
-//            responseClient = clientRequestClient.getOneClientById(subscriptionDTO.getClientId());
-//        } catch (HttpStatusCodeException e) {
-//            throw new EntityNotExistsException("Client not found");
-//        }
-//        return  AccountClientDTO.converterToDTO(save(account.converterToAccountClient(subscriptionDTO.getClientId())));
-//    }
 
     @Transactional
     @Override
