@@ -96,8 +96,8 @@ public class AccountServiceImpl implements AccountService {
 
     @Override
     public boolean existsAccountNumber(String number) {
-           boolean acountNumber  = accountRepository.existsByNumber(number);
-           if(acountNumber) {
+           boolean accountNumber  = accountRepository.existsByNumber(number);
+           if(accountNumber) {
                throw new EntityNotExistsException("There is no account with that number");
            }
            return false;
