@@ -28,7 +28,7 @@ public class ClientRequestClient {
 
     private final UtilsService utilsService;
 
-    @Value("${bank.api.url.client}")
+    @Value("${bank.api.url.user}")
     String REQUEST_URL_CLIENT;
 
     public Page<ClientDTO> getAllClientsByAccount(UUID accountId, Pageable pageable) {
