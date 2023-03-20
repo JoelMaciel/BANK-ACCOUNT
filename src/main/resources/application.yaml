@@ -32,7 +32,7 @@ logging:
 bank:
   api:
     url:
-      user: 'http://bank-user-service'
+      user: 'http://bank-user-service/bank-user'
 
 eureka:
   client:
