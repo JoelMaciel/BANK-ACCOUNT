@@ -10,6 +10,8 @@ import com.bank.contas.domain.exceptions.EntityInUseException;
 import com.bank.contas.domain.exceptions.EntityNotExistsException;
 import com.bank.contas.domain.exceptions.NumberAccountInUseException;
 import com.bank.contas.domain.models.Account;
+import com.bank.contas.domain.models.AccountClient;
+import com.bank.contas.domain.repositories.AccountClientRepository;
 import com.bank.contas.domain.repositories.AccountRepository;
 import com.bank.contas.domain.repositories.AgencyRepository;
 import com.bank.contas.domain.services.AccountService;
@@ -23,6 +25,8 @@ import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 
 @RequiredArgsConstructor
@@ -33,6 +37,8 @@ public class AccountServiceImpl implements AccountService {
             "Code account %s cannot be removed as it is in use";
 
     private final AccountRepository accountRepository;
+
+    private final AccountClientRepository accountClientRepository;
 
     private final AgencyRepository agencyRepository;
     private final AccountDTOToDomain accountDTOToDomain;
@@ -83,16 +89,15 @@ public class AccountServiceImpl implements AccountService {
     @Transactional
     @Override
     public void delete(UUID accountId) {
-        try {
-            accountRepository.deleteById(accountId);
-            accountRepository.flush();
-        } catch (EmptyResultDataAccessException e) {
-            throw  new AccountNotExistsException(accountId);
-        } catch (DataIntegrityViolationException e) {
-            throw  new EntityInUseException(String.format(MSG_ACCOUNT_IN_USE, accountId));
-        }
 
+            AccountClient accountClients = accountClientRepository.findAllAccountClientIntoAccount(accountId);
+            if (accountClients != null) {
+                accountClientRepository.delete(accountClients);
+            }
+            accountRepository.delete(searchOrFail(accountId));
+            //accountRepository.flush();
     }
+
 
     @Override
     public boolean existsAccountNumber(String number) {
