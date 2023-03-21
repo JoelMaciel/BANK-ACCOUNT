@@ -14,4 +14,8 @@ public interface AccountClientService {
     AccountClient save(AccountClient accountClient);
 
     AccountClientDTO saveAndSubscriptionClientInAccount(UUID accountId, SubscriptionDTO subscriptionDTO);
+
+    //hjoe 10:34
+   //boolean existsByAccountId(UUID accountId);
+
 }

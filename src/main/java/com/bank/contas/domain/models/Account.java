@@ -7,14 +7,13 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.*;
-import org.hibernate.annotations.FetchMode;
 
-import javax.persistence.*;
-import javax.persistence.CascadeType;
 import javax.persistence.Entity;
+import javax.persistence.*;
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.time.OffsetDateTime;
+import java.util.HashSet;
 import java.util.Set;
 import java.util.UUID;
 
@@ -55,11 +54,12 @@ public class Account implements Serializable {
     private Agency agency;
 
     @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
-    @OneToMany(mappedBy = "account", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-    private Set<AccountClient> accountsClients;
+    @OneToMany(mappedBy = "account", fetch = FetchType.LAZY)
+    @Fetch(FetchMode.SUBSELECT)
+    private Set<AccountClient> accountsClients = new HashSet<>();
 
     public AccountClient converterToAccountClient(UUID clientId) {
-        return new AccountClient(null,clientId, this);
+        return new AccountClient(null, clientId, this);
     }
 
 }

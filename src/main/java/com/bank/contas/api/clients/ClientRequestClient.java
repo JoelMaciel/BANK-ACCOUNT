@@ -64,4 +64,9 @@ public class ClientRequestClient {
         accountClientDTO.setAccountId(accountId);
         restTemplate.postForObject(url, accountClientDTO, String.class);
     }
+
+    public void deleteAccountInClient(UUID accountId) {
+        String url = REQUEST_URL_CLIENT + "/clients/accounts/" + accountId;
+        restTemplate.exchange(url, HttpMethod.DELETE, null, String.class);
+    }
 }

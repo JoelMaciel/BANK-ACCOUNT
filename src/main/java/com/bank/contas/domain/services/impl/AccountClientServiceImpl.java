@@ -25,7 +25,6 @@ public class AccountClientServiceImpl implements AccountClientService {
 
     private final AccountClientRepository accountClientRepository;
     private final AccountService accountService;
-
     private final ClientRequestClient clientRequestClient;
 
 
@@ -34,7 +33,7 @@ public class AccountClientServiceImpl implements AccountClientService {
     public AccountClientDTO saveAndSubscriptionClientInAccount(UUID accountId, SubscriptionDTO subscriptionDTO) {
         var account = accountService.searchOrFail(accountId);
         ResponseEntity<ClientDTO> responseClient;
-        if(existsByAccountAndClientId(account, subscriptionDTO.getClientId())){
+        if (existsByAccountAndClientId(account, subscriptionDTO.getClientId())) {
             throw new EntityInUseException("Error: There is already a customer registered in this account!");
         }
         try {
@@ -44,7 +43,7 @@ public class AccountClientServiceImpl implements AccountClientService {
         }
         var accountClient = save(account.converterToAccountClient(subscriptionDTO.getClientId()));
         clientRequestClient.postSubscriptionClientInAccount(accountClient.getAccount().getAccountId(), accountClient.getClientId());
-        return  AccountClientDTO.converterToDTO(accountClient);
+        return AccountClientDTO.converterToDTO(accountClient);
     }
 
     @Override
