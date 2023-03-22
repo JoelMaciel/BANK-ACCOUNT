@@ -54,11 +54,13 @@ public class ClientRequestClient {
 
     public ResponseEntity<ClientDTO> getOneClientById(UUID clientId) {
         String url = REQUEST_URL_CLIENT  + "/clients/" + clientId;
+        log.info("Request URL: {}", url);
         return  restTemplate.exchange(url, HttpMethod.GET, null, ClientDTO.class);
     }
 
     public void postSubscriptionClientInAccount(UUID accountId, UUID clientId) {
         String url = REQUEST_URL_CLIENT + "/clients/" + clientId + "/accounts/subscription";
+        log.info("Request URL: {}", url);
         var accountClientDTO = new AccountClientDTO();
         accountClientDTO.setClientId(clientId);
         accountClientDTO.setAccountId(accountId);
@@ -67,6 +69,7 @@ public class ClientRequestClient {
 
     public void deleteAccountInClient(UUID accountId) {
         String url = REQUEST_URL_CLIENT + "/clients/accounts/" + accountId;
+        log.info("Request URL: {}", url);
         restTemplate.exchange(url, HttpMethod.DELETE, null, String.class);
     }
 }

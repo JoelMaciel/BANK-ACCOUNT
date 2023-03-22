@@ -15,4 +15,7 @@ public interface AccountClientRepository extends JpaRepository<AccountClient, UU
 
     Optional<AccountClient> findByAccountAccountId(UUID accountId);
 
+    boolean existsByClientId(UUID clientId);
+
+    void deleteAllByClientId(UUID clientId);
 }

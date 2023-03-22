@@ -46,6 +46,17 @@ public class AccountClientServiceImpl implements AccountClientService {
         return AccountClientDTO.converterToDTO(accountClient);
     }
 
+    @Transactional
+    @Override
+    public void deleteAccountClientByClient(UUID clientId) {
+        existsByClientId(clientId);
+        accountClientRepository.deleteAllByClientId(clientId);
+    }
+
+    public boolean existsByClientId(UUID clientId) {
+        return accountClientRepository.existsByClientId(clientId);
+    }
+
     @Override
     public boolean existsByAccountAndClientId(Account account, UUID clientId) {
         return accountClientRepository.existsByAccountAndClientId(account, clientId);

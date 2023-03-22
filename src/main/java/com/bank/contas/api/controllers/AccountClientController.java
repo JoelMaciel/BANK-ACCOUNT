@@ -43,4 +43,10 @@ public class AccountClientController {
         return accountClientService.saveAndSubscriptionClientInAccount(accountId, subscriptionDTO);
     }
 
+    @DeleteMapping("/accounts/clients/{clientId}")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public void deleteAccountClientByClient(@PathVariable(value = "clientId") UUID clientId) {
+        accountClientService.deleteAccountClientByClient(clientId);
+    }
+
 }

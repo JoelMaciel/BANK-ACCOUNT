@@ -15,7 +15,11 @@ public interface AccountClientService {
 
     AccountClientDTO saveAndSubscriptionClientInAccount(UUID accountId, SubscriptionDTO subscriptionDTO);
 
-    //hjoe 10:34
-   //boolean existsByAccountId(UUID accountId);
+    void deleteAccountClientByClient(UUID clientId);
+
+    boolean existsByClientId(UUID clientId);
+
+
+
 
 }
