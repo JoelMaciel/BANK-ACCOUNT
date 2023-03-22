@@ -24,8 +24,6 @@ public class AccountToDTO {
     }
 
     public Page<AccountSummaryDTO> converterToPageDto(Page<Account> accountsPage, Pageable pageable) {
-        var accountDtoPage = accountsPage.map(
-                account -> modelMapper.map(account, AccountSummaryDTO.class));
-        return  accountDtoPage;
+        return accountsPage.map(account -> modelMapper.map(account, AccountSummaryDTO.class));
     }
 }

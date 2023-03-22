@@ -24,9 +24,10 @@ public class AccountController {
     private final AccountService accountService;
 
     @GetMapping
-    public Page<AccountSummaryDTO> getAllAccounts(@PageableDefault(page = 0, sort = "accountId",
-            direction = Sort.Direction.ASC) Pageable pageable) {
-        return accountService.findAll(pageable);
+    public Page<AccountSummaryDTO> getAllAccounts(SpecificationTemplate.AccountSpec spec,
+           @PageableDefault(page = 0, sort = "accountId",direction = Sort.Direction.ASC) Pageable pageable,
+           @RequestParam(required = false) UUID clientId) {
+        return accountService.findAll(spec, clientId, pageable);
     }
 
     @GetMapping("/{accountId}")

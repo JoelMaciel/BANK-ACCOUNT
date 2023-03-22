@@ -3,7 +3,6 @@ package com.bank.contas.api.models.response;
 import com.bank.contas.domain.enums.TypeAccount;
 import lombok.Data;
 
-import javax.validation.constraints.NotNull;
 import java.math.BigDecimal;
 import java.util.UUID;
 

@@ -18,8 +18,6 @@ public class AgencyToDTO {
     }
 
     public Page<AgencyDTO> converterToPageDto(Page<Agency> agenciesPage, Pageable pageable) {
-        var agenciesDtoPage = agenciesPage.map(
-                agency -> modelMapper.map(agency, AgencyDTO.class));
-        return  agenciesDtoPage;
+        return agenciesPage.map(agency -> modelMapper.map(agency, AgencyDTO.class));
     }
 }

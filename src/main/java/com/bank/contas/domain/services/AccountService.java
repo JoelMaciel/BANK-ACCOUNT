@@ -15,9 +15,9 @@ public interface AccountService {
 
     void delete(UUID accountId);
 
-    Page<AccountSummaryDTO> findAll(Pageable pageable);
+    Page<AccountSummaryDTO> findAll(Specification<Account> spec, UUID clientId, Pageable pageable);
 
-     boolean existsAccountNumber(String number);
+    boolean existsAccountNumber(String number);
 
 
     AccountSummaryDTO updateAccount(UUID accountId, AccountDTOUpdate accountUpdate);
@@ -25,4 +25,6 @@ public interface AccountService {
     AccountSummaryDTO findByAccount(UUID accountId);
 
     Account searchOrFail(UUID accountId);
+
+
 }
