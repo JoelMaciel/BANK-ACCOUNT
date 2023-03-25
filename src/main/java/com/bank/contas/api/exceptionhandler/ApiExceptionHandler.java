@@ -200,11 +200,11 @@ public class ApiExceptionHandler extends ResponseEntityExceptionHandler {
 		return handleExceptionInternal(ex, problem, new HttpHeaders(), status, request);
 	}
 	
-	@ExceptionHandler(EntityInUseException.class)
-	public ResponseEntity<?> handleEntityInUse(EntityInUseException ex, WebRequest request) {
+	@ExceptionHandler(DuplicateDataException.class)
+	public ResponseEntity<?> handleEntityInUse(DuplicateDataException ex, WebRequest request) {
 		
 		HttpStatus status = HttpStatus.CONFLICT;
-		ProblemType problemType = ProblemType.ENTITY_IN_USE;
+		ProblemType problemType = ProblemType.DUPLICATE_DATA;
 		String detail = ex.getMessage();
 		
 		Problem problem = createProblemBuilder(status, problemType, detail)
@@ -213,8 +213,21 @@ public class ApiExceptionHandler extends ResponseEntityExceptionHandler {
 		
 		return handleExceptionInternal(ex, problem, new HttpHeaders(), status, request);
 	}
-	@ExceptionHandler(AccountNotExistsException.class)
-	public ResponseEntity<?> handleEntityInUse(AccountNotExistsException ex, WebRequest request) {
+	@ExceptionHandler(AccountNotFoundException.class)
+	public ResponseEntity<?> handleEntityInUse(AccountNotFoundException ex, WebRequest request) {
+
+		HttpStatus status = HttpStatus.NOT_FOUND;
+		ProblemType problemType = ProblemType.RESOURCE_NOT_FUND;
+		String detail = ex.getMessage();
+
+		Problem problem = createProblemBuilder(status, problemType, detail)
+				.userMessage(detail)
+				.build();
+
+		return handleExceptionInternal(ex, problem, new HttpHeaders(), status, request);
+	}
+	@ExceptionHandler(AgencyNotFoundException.class)
+	public ResponseEntity<?> handleEntityInUse(AgencyNotFoundException ex, WebRequest request) {
 
 		HttpStatus status = HttpStatus.NOT_FOUND;
 		ProblemType problemType = ProblemType.RESOURCE_NOT_FUND;

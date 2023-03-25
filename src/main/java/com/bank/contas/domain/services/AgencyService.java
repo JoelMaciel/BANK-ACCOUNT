@@ -1,7 +1,8 @@
 package com.bank.contas.domain.services;
 
-import com.bank.contas.api.models.response.AgencyDTO;
-import com.bank.contas.domain.models.Agency;
+import com.bank.contas.api.models.request.AgencyDTO;
+import com.bank.contas.api.models.response.AgencyResponseDTO;
+import com.bank.contas.domain.models.AgencyModel;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
@@ -10,23 +11,21 @@ import java.util.Optional;
 import java.util.UUID;
 
 public interface AgencyService {
+    Page<AgencyResponseDTO> findAll(Specification<AgencyModel> agency, Pageable pageable);
 
-    Page<AgencyDTO> findAll(Specification<Agency> agency, Pageable pageable);
-
-    Optional<Agency> findByNumber(String number);
-
-    AgencyDTO save(AgencyDTO agencyDTO);
+    AgencyResponseDTO save(AgencyDTO agencyDTO);
 
     void delete(UUID agencyId);
 
-    Agency searchOrFail(UUID agencyId);
+    AgencyModel searchOrFail(UUID agencyId);
 
     boolean existsByName(String name);
 
-    AgencyDTO findByAgency(UUID agencyId);
+    AgencyResponseDTO findByAgency(UUID agencyId);
 
-    boolean existsAgencyNumber(String number);
+    AgencyResponseDTO updateAgency(UUID agencyId, AgencyDTO agencyDTO);
 
-    AgencyDTO updateAgency(UUID agencyId, AgencyDTO agencyDTO);
+   boolean existsAgencyNumber(String number);
 
+    Optional<AgencyModel> findByNumber(String number);
 }
