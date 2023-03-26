@@ -26,7 +26,8 @@ public class UserConsumer {
         var userModel = UserEventDTO.toEntity(userEventDTO);
 
         switch (userEventDTO.getActionType()) {
-            case "CREATE" -> userService.save(userModel);
+            case "CREATE", "UPDATE"  -> userService.save(userModel);
+            case "DELETE" -> userService.delete(userEventDTO.getUserId());
         }
     }
 }
