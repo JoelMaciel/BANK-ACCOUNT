@@ -1,7 +1,7 @@
 package com.bank.contas.domain.services.impl;
 
-import com.bank.contas.api.models.request.AgencyDTO;
-import com.bank.contas.api.models.response.AgencyResponseDTO;
+import com.bank.contas.api.dtos.request.AgencyDTO;
+import com.bank.contas.api.dtos.response.AgencyResponseDTO;
 import com.bank.contas.domain.exceptions.AgencyNotFoundException;
 import com.bank.contas.domain.exceptions.DuplicateDataException;
 import com.bank.contas.domain.exceptions.EntityNotExistsException;
@@ -19,7 +19,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
-import java.util.Optional;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
@@ -101,16 +100,6 @@ public class AgencyServiceImpl implements AgencyService {
     @Override
     public boolean existsByName(String name) {
         return agencyRepository.existsByName(name);
-    }
-
-    @Override
-    public boolean existsAgencyNumber(String number) {
-        return agencyRepository.existsByNumber(number);
-    }
-
-    @Override
-    public Optional<AgencyModel> findByNumber(String number) {
-        return agencyRepository.findByNumber(number);
     }
 
 }

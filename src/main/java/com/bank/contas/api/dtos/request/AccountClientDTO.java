@@ -1,4 +1,4 @@
-package com.bank.contas.api.models.request;
+package com.bank.contas.api.dtos.request;
 
 import lombok.Data;
 

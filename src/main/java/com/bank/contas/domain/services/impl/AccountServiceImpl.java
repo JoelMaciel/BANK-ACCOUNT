@@ -1,17 +1,17 @@
 package com.bank.contas.domain.services.impl;
 
-import com.bank.contas.api.models.request.AccountDTO;
-import com.bank.contas.api.models.request.AccountDTOUpdate;
-import com.bank.contas.api.models.response.AccountResponseDTO;
+import com.bank.contas.api.dtos.request.AccountDTO;
+import com.bank.contas.api.dtos.request.AccountDTOUpdate;
+import com.bank.contas.api.dtos.response.AccountResponseDTO;
 import com.bank.contas.domain.exceptions.AccountNotFoundException;
 import com.bank.contas.domain.exceptions.AgencyNotFoundException;
 import com.bank.contas.domain.exceptions.EntityNotExistsException;
 import com.bank.contas.domain.exceptions.NumberAccountInUseException;
 import com.bank.contas.domain.models.AccountModel;
-import com.bank.contas.domain.models.AgencyModel;
 import com.bank.contas.domain.repositories.AccountRepository;
 import com.bank.contas.domain.repositories.AgencyRepository;
 import com.bank.contas.domain.services.AccountService;
+import com.bank.contas.domain.services.UserService;
 import com.bank.contas.infrastructure.specification.SpecificationTemplate;
 import lombok.RequiredArgsConstructor;
 import org.springframework.dao.DataIntegrityViolationException;
@@ -25,7 +25,6 @@ import org.springframework.transaction.annotation.Transactional;
 import javax.persistence.EntityNotFoundException;
 import java.util.List;
 import java.util.NoSuchElementException;
-import java.util.Optional;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
@@ -34,14 +33,16 @@ import java.util.stream.Collectors;
 public class AccountServiceImpl implements AccountService {
 
     private static final String MSG_ACCOUNT_IN_USE =
-            "Code account %s cannot be removed as it is in use";
+            "An account with that number already exists.";
     private final static String MSG_ACCOUNT_NOT_FOUND =
-            "There is no agency registered with this number.";
+            "There is no account registered with this number.";
     private final static String MSG_ACCOUNT_ID =
-            "There is no agency registered with this Id.";
+            "There is no account registered with this Id.";
 
     private final AccountRepository accountRepository;
     private final AgencyRepository agencyRepository;
+
+    private final UserService userService;
 
 
     @Transactional
@@ -79,8 +80,6 @@ public class AccountServiceImpl implements AccountService {
         } catch (EntityNotFoundException e) {
             throw new AccountNotFoundException(MSG_ACCOUNT_NOT_FOUND);
         }
-
-
     }
 
     @Override
@@ -90,24 +89,19 @@ public class AccountServiceImpl implements AccountService {
 
     @Transactional
     @Override
-    public AccountResponseDTO save(AccountDTO accountDTO) {
+    public AccountResponseDTO save(AccountDTO accountDTO, UUID userId) {
         try {
-            Optional<AgencyModel> agency = agencyRepository.findByNumber(accountDTO.getNumberAgency());
+            var agency = agencyRepository.findByNumber(accountDTO.getNumberAgency());
             existsAccountNumber(accountDTO.getNumber());
-            AccountModel accountModel = accountRepository.save(AccountDTO.toEntity(accountDTO, agency.get()));
+            var user = userService.findById(userId);
+            AccountModel accountModel = accountRepository.save(AccountDTO.toEntity(accountDTO, agency.get(), user));
             accountRepository.flush();
             return AccountResponseDTO.toDTO(accountModel);
         } catch (DataIntegrityViolationException e) {
-            throw new NumberAccountInUseException("An account with that number already exists.");
+            throw new NumberAccountInUseException(MSG_ACCOUNT_IN_USE);
         } catch (NoSuchElementException e) {
             throw new AgencyNotFoundException(accountDTO.getNumberAgency());
         }
-    }
-
-    @Transactional
-    @Override
-    public void delete(UUID accountId) {
-        accountRepository.delete(findAccountId(accountId));
     }
 
     @Override
@@ -124,8 +118,6 @@ public class AccountServiceImpl implements AccountService {
         return accountRepository.findById(accountId)
                 .orElseThrow(() -> new AccountNotFoundException(MSG_ACCOUNT_ID));
     }
-
-
 }
 
 

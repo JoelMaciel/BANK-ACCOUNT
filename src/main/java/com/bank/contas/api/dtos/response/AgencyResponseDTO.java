@@ -1,4 +1,4 @@
-package com.bank.contas.api.models.response;
+package com.bank.contas.api.dtos.response;
 
 import com.bank.contas.domain.models.AgencyModel;
 import com.fasterxml.jackson.annotation.JsonIgnore;

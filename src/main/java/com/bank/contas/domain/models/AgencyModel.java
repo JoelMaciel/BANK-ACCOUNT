@@ -1,6 +1,6 @@
 package com.bank.contas.domain.models;
 
-import com.bank.contas.api.models.request.AgencyDTO;
+import com.bank.contas.api.dtos.request.AgencyDTO;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;

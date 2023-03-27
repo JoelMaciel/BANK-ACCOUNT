@@ -1,7 +1,7 @@
 package com.bank.contas.api.controllers;
 
-import com.bank.contas.api.models.response.AgencyResponseDTO;
-import com.bank.contas.api.models.request.AgencyDTO;
+import com.bank.contas.api.dtos.response.AgencyResponseDTO;
+import com.bank.contas.api.dtos.request.AgencyDTO;
 import com.bank.contas.domain.services.AgencyService;
 import com.bank.contas.infrastructure.specification.SpecificationTemplate;
 import lombok.RequiredArgsConstructor;

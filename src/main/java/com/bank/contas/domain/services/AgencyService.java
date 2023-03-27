@@ -1,13 +1,12 @@
 package com.bank.contas.domain.services;
 
-import com.bank.contas.api.models.request.AgencyDTO;
-import com.bank.contas.api.models.response.AgencyResponseDTO;
+import com.bank.contas.api.dtos.request.AgencyDTO;
+import com.bank.contas.api.dtos.response.AgencyResponseDTO;
 import com.bank.contas.domain.models.AgencyModel;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
 
-import java.util.Optional;
 import java.util.UUID;
 
 public interface AgencyService {
@@ -25,7 +24,4 @@ public interface AgencyService {
 
     AgencyResponseDTO updateAgency(UUID agencyId, AgencyDTO agencyDTO);
 
-   boolean existsAgencyNumber(String number);
-
-    Optional<AgencyModel> findByNumber(String number);
 }

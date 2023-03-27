@@ -199,6 +199,22 @@ public class ApiExceptionHandler extends ResponseEntityExceptionHandler {
 		
 		return handleExceptionInternal(ex, problem, new HttpHeaders(), status, request);
 	}
+
+
+	@ExceptionHandler(RestrictedAccessException.class)
+	public ResponseEntity<?> handleEntityNotFound(RestrictedAccessException ex,
+												  WebRequest request) {
+
+		HttpStatus status = HttpStatus.BAD_REQUEST;
+		ProblemType problemType = ProblemType.BUSINESS_ERROR;
+		String detail = ex.getMessage();
+
+		Problem problem = createProblemBuilder(status, problemType, detail)
+				.userMessage(detail)
+				.build();
+
+		return handleExceptionInternal(ex, problem, new HttpHeaders(), status, request);
+	}
 	
 	@ExceptionHandler(DuplicateDataException.class)
 	public ResponseEntity<?> handleEntityInUse(DuplicateDataException ex, WebRequest request) {

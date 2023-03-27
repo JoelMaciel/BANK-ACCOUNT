@@ -1,4 +1,4 @@
-package com.bank.contas.api.models.event;
+package com.bank.contas.api.dtos.event;
 
 import com.bank.contas.domain.models.UserModel;
 import lombok.AllArgsConstructor;

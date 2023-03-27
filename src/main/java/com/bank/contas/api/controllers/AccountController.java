@@ -1,8 +1,8 @@
 package com.bank.contas.api.controllers;
 
-import com.bank.contas.api.models.request.AccountDTO;
-import com.bank.contas.api.models.request.AccountDTOUpdate;
-import com.bank.contas.api.models.response.AccountResponseDTO;
+import com.bank.contas.api.dtos.request.AccountDTO;
+import com.bank.contas.api.dtos.request.AccountDTOUpdate;
+import com.bank.contas.api.dtos.response.AccountResponseDTO;
 import com.bank.contas.domain.services.AccountService;
 import com.bank.contas.infrastructure.specification.SpecificationTemplate;
 import lombok.RequiredArgsConstructor;
@@ -37,8 +37,9 @@ public class AccountController {
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public AccountResponseDTO saveAccount(@RequestBody @Valid AccountDTO accountDTO) {
-       return accountService.save(accountDTO);
+    public AccountResponseDTO saveAccount(@RequestBody @Valid AccountDTO accountDTO,
+                                          @RequestParam(value = "userId") UUID userId) {
+       return accountService.save(accountDTO, userId);
     }
 
     @PatchMapping("{accountId}")
@@ -47,9 +48,4 @@ public class AccountController {
       return   accountService.updateAccount(accountId, accountUpdate);
     }
 
-    @DeleteMapping("/{accountId}")
-    @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void deleteAccount(@PathVariable UUID accountId) {
-        accountService.delete(accountId);
-    }
 }

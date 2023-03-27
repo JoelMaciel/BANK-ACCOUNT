@@ -1,5 +1,6 @@
 package com.bank.contas.domain.models;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.*;
 import org.hibernate.annotations.Type;
@@ -23,7 +24,9 @@ public class UserModel implements Serializable {
 
     @Id
     @Type(type = "org.hibernate.type.UUIDCharType")
+    @JsonIgnore
     private UUID userId;
+
     @Column(nullable = false, unique = true, length = 50)
     private String name;
 
@@ -46,9 +49,6 @@ public class UserModel implements Serializable {
     @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     @OneToMany(mappedBy = "user" ,fetch = FetchType.LAZY)
     private Set<AccountModel> accounts = new HashSet<>();
-
-
-
 
 
 }

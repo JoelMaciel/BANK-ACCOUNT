@@ -1,7 +1,8 @@
-package com.bank.contas.api.models.response;
+package com.bank.contas.api.dtos.response;
 
 import com.bank.contas.domain.enums.TypeAccount;
 import com.bank.contas.domain.models.AccountModel;
+import com.bank.contas.domain.models.UserModel;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -28,6 +29,8 @@ public class AccountResponseDTO {
 
     private String agencyNumber;
 
+    private UserModel user;
+
     public static AccountResponseDTO toDTO(AccountModel accountModel) {
         return AccountResponseDTO.builder()
                 .accountId(accountModel.getAccountId())
@@ -35,6 +38,7 @@ public class AccountResponseDTO {
                 .type(accountModel.getType())
                 .balance(accountModel.getBalance())
                 .agencyNumber(accountModel.getAgency().getNumber())
+                .user(accountModel.getUser())
                 .build();
     }
 }

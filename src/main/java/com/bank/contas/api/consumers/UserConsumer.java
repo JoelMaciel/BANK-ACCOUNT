@@ -1,6 +1,6 @@
 package com.bank.contas.api.consumers;
 
-import com.bank.contas.api.models.event.UserEventDTO;
+import com.bank.contas.api.dtos.event.UserEventDTO;
 import com.bank.contas.domain.services.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.amqp.core.ExchangeTypes;
