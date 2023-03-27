@@ -1,8 +1,8 @@
 package com.bank.contas.api.controllers;
 
-import com.bank.contas.api.models.request.AccountDTO;
-import com.bank.contas.api.models.request.AccountDTOUpdate;
-import com.bank.contas.api.models.response.AccountSummaryDTO;
+import com.bank.contas.api.dtos.request.AccountDTO;
+import com.bank.contas.api.dtos.request.AccountDTOUpdate;
+import com.bank.contas.api.dtos.response.AccountResponseDTO;
 import com.bank.contas.domain.services.AccountService;
 import com.bank.contas.infrastructure.specification.SpecificationTemplate;
 import lombok.RequiredArgsConstructor;
@@ -24,32 +24,28 @@ public class AccountController {
     private final AccountService accountService;
 
     @GetMapping
-    public Page<AccountSummaryDTO> getAllAccounts(SpecificationTemplate.AccountSpec spec,
-           @PageableDefault(page = 0, sort = "accountId",direction = Sort.Direction.ASC) Pageable pageable,
-           @RequestParam(required = false) UUID clientId) {
-        return accountService.findAll(spec, clientId, pageable);
+    public Page<AccountResponseDTO> getAllAccounts(SpecificationTemplate.AccountSpec spec,
+         @PageableDefault(page = 0, sort = "accountId",direction = Sort.Direction.ASC) Pageable pageable,
+         @RequestParam(required = false) UUID userId) {
+        return accountService.findAll(spec, userId, pageable);
     }
 
     @GetMapping("/{accountId}")
-    public AccountSummaryDTO getOneAccount(@PathVariable UUID accountId) {
+    public AccountResponseDTO getOneAccount(@PathVariable UUID accountId) {
         return accountService.findByAccount(accountId);
     }
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public AccountDTO saveAccount(@RequestBody @Valid AccountDTO accountDTO) {
-       return accountService.save(accountDTO);
+    public AccountResponseDTO saveAccount(@RequestBody @Valid AccountDTO accountDTO,
+                                          @RequestParam(value = "userId") UUID userId) {
+       return accountService.save(accountDTO, userId);
     }
 
-    @PutMapping("{accountId}")
-    public AccountSummaryDTO updateAccount(@PathVariable UUID accountId,
-                          @RequestBody @Valid AccountDTOUpdate accountUpdate) {
+    @PatchMapping("{accountId}")
+    public AccountResponseDTO updateAccount(@PathVariable UUID accountId,
+                                            @RequestBody @Valid AccountDTOUpdate accountUpdate) {
       return   accountService.updateAccount(accountId, accountUpdate);
     }
 
-    @DeleteMapping("/{accountId}")
-    @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void deleteAccount(@PathVariable UUID accountId) {
-        accountService.delete(accountId);
-    }
 }
