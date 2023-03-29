@@ -21,7 +21,7 @@ public class AccountTransactionController {
         return accountOperationService.consultBalance(accountId);
     }
     @PutMapping("/{accountId}/deposit")
-    public void depositAccount(@PathVariable UUID accountId, @RequestParam BigDecimal amount) {
+    public void depositAccount(@PathVariable UUID accountId, @Nullable @RequestParam BigDecimal amount) {
         accountOperationService.deposit(accountId, amount);
     }
 
@@ -32,7 +32,7 @@ public class AccountTransactionController {
 
     @PutMapping("/{accountIdOrigin}/{accountIdDestiny}/transfer")
     public void transferAccount(@PathVariable UUID accountIdOrigin,  @PathVariable UUID accountIdDestiny,
-                                                                   @Nullable @RequestParam BigDecimal amount) {
+                                                                     @Nullable @RequestParam BigDecimal amount) {
         accountOperationService.transfer(accountIdOrigin, accountIdDestiny, amount);
     }
 }
