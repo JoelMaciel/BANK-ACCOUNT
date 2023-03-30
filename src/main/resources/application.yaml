@@ -38,9 +38,11 @@ bank:
   broker:
     exchange:
       userEventExchange: bank.userevent
+      accountEvent: bank.accountevent
     queue:
       userEventQueue:
         name: bank.userevent.ms.account
+
 
 eureka:
   client:

@@ -244,8 +244,8 @@ public class ApiExceptionHandler extends ResponseEntityExceptionHandler {
 		return handleExceptionInternal(ex, problem, new HttpHeaders(), status, request);
 	}
 
-	@ExceptionHandler(AccountNotFoundException.class)
-	public ResponseEntity<?> handleAccountNotFound(AccountNotFoundException ex, WebRequest request) {
+	@ExceptionHandler(AccountNotExistException.class)
+	public ResponseEntity<?> handleAccountNotFound(AccountNotExistException ex, WebRequest request) {
 
 		HttpStatus status = HttpStatus.NOT_FOUND;
 		ProblemType problemType = ProblemType.RESOURCE_NOT_FUND;
