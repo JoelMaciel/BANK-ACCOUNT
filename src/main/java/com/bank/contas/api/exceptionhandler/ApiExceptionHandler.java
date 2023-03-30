@@ -92,7 +92,7 @@ public class ApiExceptionHandler extends ResponseEntityExceptionHandler {
 			HttpHeaders headers, HttpStatus status, WebRequest request) {
 		
 		ProblemType problemType = ProblemType.RESOURCE_NOT_FUND;
-		String detail = String.format("O recurso %s, que você tentou acessar, é inexistente.", 
+		String detail = String.format("The resource %s, which you tried to access, does not exist.",
 				ex.getRequestURL());
 		
 		Problem problem = createProblemBuilder(status, problemType, detail)
@@ -200,21 +200,6 @@ public class ApiExceptionHandler extends ResponseEntityExceptionHandler {
 		return handleExceptionInternal(ex, problem, new HttpHeaders(), status, request);
 	}
 
-
-	@ExceptionHandler(RestrictedAccessException.class)
-	public ResponseEntity<?> handleEntityNotFound(RestrictedAccessException ex,
-												  WebRequest request) {
-
-		HttpStatus status = HttpStatus.BAD_REQUEST;
-		ProblemType problemType = ProblemType.BUSINESS_ERROR;
-		String detail = ex.getMessage();
-
-		Problem problem = createProblemBuilder(status, problemType, detail)
-				.userMessage(detail)
-				.build();
-
-		return handleExceptionInternal(ex, problem, new HttpHeaders(), status, request);
-	}
 	
 	@ExceptionHandler(DuplicateDataException.class)
 	public ResponseEntity<?> handleEntityInUse(DuplicateDataException ex, WebRequest request) {
@@ -229,8 +214,38 @@ public class ApiExceptionHandler extends ResponseEntityExceptionHandler {
 		
 		return handleExceptionInternal(ex, problem, new HttpHeaders(), status, request);
 	}
-	@ExceptionHandler(AccountNotFoundException.class)
-	public ResponseEntity<?> handleEntityInUse(AccountNotFoundException ex, WebRequest request) {
+
+
+	@ExceptionHandler(IllegalArgumentException.class)
+	public ResponseEntity<?> handleIllegalArgument(IllegalArgumentException ex, WebRequest request) {
+
+		HttpStatus status = HttpStatus.BAD_REQUEST;
+		ProblemType problemType = ProblemType.INVALID_DATA;
+		String detail = ex.getMessage();
+
+		Problem problem = createProblemBuilder(status, problemType, detail)
+				.userMessage(detail)
+				.build();
+
+		return handleExceptionInternal(ex, problem, new HttpHeaders(), status, request);
+	}
+
+	@ExceptionHandler(NullPointerException.class)
+	public ResponseEntity<?> handleAmountNotFound(NullPointerException ex, WebRequest request) {
+
+		HttpStatus status = HttpStatus.BAD_REQUEST;
+		ProblemType problemType = ProblemType.INVALID_DATA;
+		String detail = ex.getMessage();
+
+		Problem problem = createProblemBuilder(status, problemType, detail)
+				.userMessage(detail)
+				.build();
+
+		return handleExceptionInternal(ex, problem, new HttpHeaders(), status, request);
+	}
+
+	@ExceptionHandler(AccountNotExistException.class)
+	public ResponseEntity<?> handleAccountNotFound(AccountNotExistException ex, WebRequest request) {
 
 		HttpStatus status = HttpStatus.NOT_FOUND;
 		ProblemType problemType = ProblemType.RESOURCE_NOT_FUND;

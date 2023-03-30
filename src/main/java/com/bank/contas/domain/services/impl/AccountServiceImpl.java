@@ -3,7 +3,7 @@ package com.bank.contas.domain.services.impl;
 import com.bank.contas.api.dtos.request.AccountDTO;
 import com.bank.contas.api.dtos.request.AccountDTOUpdate;
 import com.bank.contas.api.dtos.response.AccountResponseDTO;
-import com.bank.contas.domain.exceptions.AccountNotFoundException;
+import com.bank.contas.domain.exceptions.AccountNotExistException;
 import com.bank.contas.domain.exceptions.AgencyNotFoundException;
 import com.bank.contas.domain.exceptions.EntityNotExistsException;
 import com.bank.contas.domain.exceptions.NumberAccountInUseException;
@@ -78,7 +78,7 @@ public class AccountServiceImpl implements AccountService {
             accountRepository.flush();
             return AccountResponseDTO.toDTO(accountModel);
         } catch (EntityNotFoundException e) {
-            throw new AccountNotFoundException(MSG_ACCOUNT_NOT_FOUND);
+            throw new AccountNotExistException(MSG_ACCOUNT_NOT_FOUND);
         }
     }
 
@@ -116,7 +116,7 @@ public class AccountServiceImpl implements AccountService {
     @Override
     public AccountModel findAccountId(UUID accountId) {
         return accountRepository.findById(accountId)
-                .orElseThrow(() -> new AccountNotFoundException(MSG_ACCOUNT_ID));
+                .orElseThrow(() -> new AccountNotExistException(MSG_ACCOUNT_ID));
     }
 }
 

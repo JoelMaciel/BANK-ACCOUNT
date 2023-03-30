@@ -1,10 +1,10 @@
 package com.bank.contas.domain.exceptions;
 
-public class RestrictedAccessException extends EntityNotExistsException{
+public class AccountNotExistException extends EntityNotExistsException{
 
     private static final long serialVersionUID = 1L;
 
-    public RestrictedAccessException(String message) {
+    public AccountNotExistException(String message) {
         super(message);
     }
 

@@ -58,4 +58,34 @@ public class AccountModel implements Serializable {
     @JoinColumn(name = "user_id")
     private UserModel user;
 
+    public void deposit(BigDecimal amount) {
+        validateAmount(amount);
+        balance = balance.add(amount);
+    }
+
+    public void withdraw(BigDecimal amount) {
+        validateAmount(amount);
+        validateBalance(amount);
+        balance = balance.subtract(amount);
+    }
+
+    public void transfer(AccountModel account, BigDecimal amount) {
+        validateAmount(amount);
+        validateBalance(amount);
+        this.withdraw(amount);
+        account.deposit(amount);
+    }
+
+    private void validateBalance(BigDecimal amount) {
+        if (amount.compareTo(balance) > 0) {
+            throw new IllegalArgumentException("Insufficient balance for transfer");
+        }
+    }
+
+    private void validateAmount(BigDecimal amount) {
+        if (amount == null || amount.compareTo(BigDecimal.ZERO) <= 0) {
+            throw new NullPointerException("The amount cannot be empty or less than zero.");
+        }
+    }
+
 }
