@@ -1,52 +1,10 @@
 
-server:
-  port: 8082
-  servlet:
-    context-path: '/bank-account/'
-
 spring:
   application:
     name: bank-account-service
-  datasource:
-    url: jdbc:mysql://localhost/bank_account2?createDatabaseIfNotExist=true&serverTimeZone=UTC
-    username: root
-    password:
-
-  jpa:
-    hibernate:
-      ddl-auto: update
-      properties: org.hibernate.dialect.MySQL8Dialect
-      jdbc:
-        lob.non-contextual-creation: true
-    properties:
-      hibernate:
-        format_sql: true
-  rabbitmq:
-    addresses: amqps://crdzywry:s60VjJGfFG8XvLV47DGyCp5Ig8l2oyCi@woodpecker.rmq.cloudamqp.com/crdzywry
-
-logging:
-  level:
-    com.ead: TRACE
-    root: INFO
-    org.springframework.web: DEBUG
-    org.hibernate: INFO
-
-bank:
-  api:
-    url:
-      user: 'http://bank-user-service/bank-user'
-  broker:
-    exchange:
-      userEventExchange: bank.userevent
-      accountEvent: bank.accountevent
-    queue:
-      userEventQueue:
-        name: bank.userevent.ms.account
-
-
-eureka:
-  client:
-    service-url:
-      defaultZone: 'http://localhost:8761/eureka'
-  instance:
-    hostname: localhost
+  config:
+    import: 'configserver:'
+  cloud:
+    config:
+      discovery:
+        serviceId: bank-config-server
