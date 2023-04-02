@@ -28,7 +28,10 @@ public class UserModel implements Serializable {
     private UUID userId;
 
     @Column(nullable = false, unique = true, length = 50)
-    private String name;
+    private String username;
+
+    @Column(nullable = false)
+    private String fullName;
 
     @CPF
     @Column(nullable = false)
