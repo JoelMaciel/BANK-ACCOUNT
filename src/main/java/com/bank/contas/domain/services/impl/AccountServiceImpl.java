@@ -41,7 +41,6 @@ public class AccountServiceImpl implements AccountService {
 
     private final AccountRepository accountRepository;
     private final AgencyRepository agencyRepository;
-
     private final UserService userService;
 
 

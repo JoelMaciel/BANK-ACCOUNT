@@ -17,7 +17,8 @@ public class UserEventDTO {
 
     @Id
     private UUID userId;
-    private String name;
+    private String username;
+    private String fullName;
     private String cpf;
     private String email;
     private String phoneNumber;
@@ -28,7 +29,8 @@ public class UserEventDTO {
     public static UserModel toEntity(UserEventDTO userEventDTO) {
         return UserModel.builder()
                 .userId(userEventDTO.getUserId())
-                .name(userEventDTO.getName())
+                .username(userEventDTO.getUsername())
+                .fullName(userEventDTO.getFullName())
                 .cpf(userEventDTO.getCpf())
                 .email(userEventDTO.getEmail())
                 .phoneNumber(userEventDTO.getPhoneNumber())
