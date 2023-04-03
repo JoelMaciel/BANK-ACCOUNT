@@ -11,6 +11,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
@@ -23,6 +24,7 @@ import java.util.UUID;
 public class AccountController {
     private final AccountService accountService;
 
+    @PreAuthorize("hasAnyRole('EMPLOYEE')")
     @GetMapping
     public Page<AccountResponseDTO> getAllAccounts(SpecificationTemplate.AccountSpec spec,
          @PageableDefault(page = 0, sort = "accountId",direction = Sort.Direction.ASC) Pageable pageable,
@@ -30,11 +32,13 @@ public class AccountController {
         return accountService.findAll(spec, userId, pageable);
     }
 
+    @PreAuthorize("hasAnyRole('EMPLOYEE')")
     @GetMapping("/{accountId}")
     public AccountResponseDTO getOneAccount(@PathVariable UUID accountId) {
         return accountService.findByAccount(accountId);
     }
 
+    @PreAuthorize("hasAnyRole('EMPLOYEE')")
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
     public AccountResponseDTO saveAccount(@RequestBody @Valid AccountDTO accountDTO,
@@ -42,6 +46,7 @@ public class AccountController {
        return accountService.save(accountDTO, userId);
     }
 
+    @PreAuthorize("hasAnyRole('EMPLOYEE')")
     @PatchMapping("{accountId}")
     public AccountResponseDTO updateAccount(@PathVariable UUID accountId,
                                             @RequestBody @Valid AccountDTOUpdate accountUpdate) {
